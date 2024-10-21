@@ -1,19 +1,43 @@
-long long poww(long long a,long long b, long long M)
+bool isPrime(ll n)
 {
-    if(b==0) return 1;
-    if(b==1) return a%M;
-    long long p=poww(a,b/2,M);
-    if(b&1) return p*p%M*a%M;
-    return p*p%M;
+    if (n < 2 || n == 4) return false;
+    if (n == 2 || n == 3 || n == 5) return true;
+    if (n % 2 == 0 || n % 3 == 0 || n % 5 == 0) return false;
+
+    for (int x = 5; 1LL * x * x <= n; x += 6)
+        if (n % x == 0 || n % (x + 2) == 0)
+            return false;
+            
+    return true;
 }
-long long mull(long long a,long long b,long long M) // if a*b > 1e18
+
+ull mulmod(ull a,ull b,ull mod) // if a*b > 1e18
 {
-    if(b==0) return 0;
-    if(b==1) return a%M;
+    ull base=a;
+    ull ans=0;
+    for (; b > 0; b >>= 1, (base*=2)%=mod)
+       if (b & 1) (ans += base) %= mod ;
     
-    long long c=mull(a,b/2,M);
-    if(b&1) return (+c+a)%M;
-    return (c+c)%M;
+   return ans;
+}
+ull powmod(ull b, ull e, ull mod) {
+    ull ans = 1;
+    for (; e ; e >>= 1, b = mulmod(b, b, mod))
+        if (e & 1) ans = mulmod (ans, b, mod) ;
+    return ans;
+}
+bool MillerRabin (ull n) {
+    if (n < 2 || n % 6 % 4 != 1) return (n | 1) == 3;
+    ull A[] = {2, 325, 9375, 28178, 450775, 9780504, 1795265022};
+    ull s = __builtin_ctzll(n-1);
+    ull d = n >> s;
+    for (ull a : A) { // ^
+        ull p = powmod(a%n, d, n), i = s;
+        while (p != 1 && p != n - 1 && a % n && i--)
+            p = mulmod(p, p, n);
+        if (p != n-1 && i != s) return 0;
+    }
+    return 1;
 }
 int phi(int n) {
     int res = n;
@@ -62,7 +86,7 @@ struct Matrix{
         for(int i = 0; i <x; ++i) {
             for(int j = 0; j < z; ++j) {
                 for(int k = 0; k < y; ++k) {
-                    product.a[i][j] = (product.a[i][j] + 1LL * a[i][k] * other.a[k][j] % mod ) % mod;
+                    (product.a[i][j] += 1LL * a[i][k] * other.a[k][j] % mod ) %= mod;
                 }
             }
         }
@@ -76,7 +100,7 @@ struct Matrix{
         for(int i = 0; i <x; ++i) {
             for(int j = 0; j < z; ++j) {
                 for(int k = 0; k < y; ++k) {
-                    product.a[i][j] = (product.a[i][j] + 1LL * a[i][k] * other.a[k][j] % mod ) % mod;
+                    (product.a[i][j] += 1LL * a[i][k] * other.a[k][j] % mod ) %= mod;
                 }
             }
         }
@@ -126,7 +150,7 @@ struct RealMatrix{
         for(int i = 0; i <x; ++i) {
             for(int j = 0; j < z; ++j) {
                 for(int k = 0; k < y; ++k) {
-                    product.a[i][j] = (product.a[i][j] + a[i][k] * other.a[k][j]  ) ;
+                    product.a[i][j] += a[i][k] * other.a[k][j];
                 }
             }
         }
@@ -140,7 +164,7 @@ struct RealMatrix{
         for(int i = 0; i <x; ++i) {
             for(int j = 0; j < z; ++j) {
                 for(int k = 0; k < y; ++k) {
-                    product.a[i][j] = (product.a[i][j] +  a[i][k] * other.a[k][j]  );
+                    product.a[i][j] += a[i][k] * other.a[k][j];
                 }
             }
         }
