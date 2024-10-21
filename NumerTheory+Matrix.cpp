@@ -19,19 +19,12 @@ ll pw(ll x, ll n) //nomar pow
 
     return res;
 }
-bool isPrime(ll n)
-{
-    if (n < 2 || n == 4) return false;
-    if (n == 2 || n == 3 || n == 5) return true;
-    if (n % 2 == 0 || n % 3 == 0 || n % 5 == 0) return false;
-
-    for (int x = 5; 1LL * x * x <= n; x += 6)
-        if (n % x == 0 || n % (x + 2) == 0)
-            return false;
-            
-    return true;
+ll log(ll q,ll n){  // LOG(q,n)
+    ll p = pow(n, double(1.0) / q);
+    while (pw(p, q) < n) ++p;
+    while (pw(p, q) > n) --p;
+    return p;
 }
-
 ull mulmod(ull a,ull b,ull mod) //  a * b % mod
 {
     ull base=a;
@@ -46,6 +39,19 @@ ull powmod(ull b, ull e, ull mod) { // a ^ b % mod
     for (; e ; e >>= 1, b = mulmod(b, b, mod))
         if (e & 1) ans = mulmod (ans, b, mod) ;
     return ans;
+}
+
+bool isPrime(ll n)
+{
+    if (n < 2 || n == 4) return false;
+    if (n == 2 || n == 3 || n == 5) return true;
+    if (n % 2 == 0 || n % 3 == 0 || n % 5 == 0) return false;
+
+    for (int x = 5; 1LL * x * x <= n; x += 6)
+        if (n % x == 0 || n % (x + 2) == 0)
+            return false;
+            
+    return true;
 }
 bool MillerRabin (ull n) {
     if (n < 2 || n % 6 % 4 != 1) return (n | 1) == 3;
