@@ -1,3 +1,24 @@
+ll pw(ll x, ll n) //nomar pow
+{
+    ll res = 1;
+    for (; n > 0; n >>= 1)
+    {
+        if (n & 1)
+        {
+            if (res <= ooo / x)
+                res *= x;
+            else
+                res = +ooo;
+        }
+
+        if (x <= ooo / x)
+            x *= x;
+        else
+            x = +ooo;
+    }
+
+    return res;
+}
 bool isPrime(ll n)
 {
     if (n < 2 || n == 4) return false;
@@ -11,7 +32,7 @@ bool isPrime(ll n)
     return true;
 }
 
-ull mulmod(ull a,ull b,ull mod) // if a*b > 1e18
+ull mulmod(ull a,ull b,ull mod) //  a * b % mod
 {
     ull base=a;
     ull ans=0;
@@ -20,7 +41,7 @@ ull mulmod(ull a,ull b,ull mod) // if a*b > 1e18
     
    return ans;
 }
-ull powmod(ull b, ull e, ull mod) {
+ull powmod(ull b, ull e, ull mod) { // a ^ b % mod
     ull ans = 1;
     for (; e ; e >>= 1, b = mulmod(b, b, mod))
         if (e & 1) ans = mulmod (ans, b, mod) ;
