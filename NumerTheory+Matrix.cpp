@@ -40,7 +40,15 @@ ull powmod(ull b, ull e, ull mod) { // a ^ b % mod
         if (e & 1) ans = mulmod (ans, b, mod) ;
     return ans;
 }
-
+const int N=1e7;
+int minP[N+5];
+void sang(){
+    for(int i=0;i<=N;i++) minP[i]=i;
+    for(int i=2;i*i<=N;i++) if(minP[i]==i){
+        for(int j=i*i;j<=N;j+=i) if(minP[j]==j)
+            minP[j]=i;
+    }
+}
 bool isPrime(ll n)
 {
     if (n < 2 || n == 4) return false;
