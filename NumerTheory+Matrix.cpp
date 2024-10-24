@@ -45,6 +45,7 @@ const int N=2e5;
 ll gt[N+5],igt[N+5];
 
 ll ckn(int n,int k){
+    assert(n >= k);
     return gt[n]*igt[k]%mod*igt[n-k]%mod;
 }
 
