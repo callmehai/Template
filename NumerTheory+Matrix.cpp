@@ -40,6 +40,21 @@ ull powmod(ull b, ull e, ull mod) { // a ^ b % mod
         if (e & 1) ans = mulmod (ans, b, mod) ;
     return ans;
 }
+
+const int N=2e5;
+ll gt[N+5],igt[N+5];
+
+ll ckn(int n,int k){
+    return gt[n]*igt[k]%mod*igt[n-k]%mod;
+}
+
+gt[0]=1;
+for(int i=1;i<=N;i++) gt[i]=(gt[i-1]*i)%mod;
+igt[N]=powmod(gt[N], mod-2, mod);
+for(int i=N-1;i>=0;i--) igt[i]=(igt[i+1]*(i+1))%mod;
+    
+
+
 const int N=1e7;
 int minP[N+5];
 void sang(){
