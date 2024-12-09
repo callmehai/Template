@@ -1,3 +1,28 @@
+const int N=2e5+5;
+int n;
+int a[N];
+struct RMQ
+{
+    int f[20][N],lg[N],x;
+    void init()
+    {
+        for(int i=1;i<=n;i++) 
+        {
+            lg[i]=lg[i>>1]+(i>1);
+            f[0][i]=a[i];
+        }
+        for(int i=1;(1<<i)<=n;i++)
+            for(int j=1;j+(1<<(i-1))<=n;j++)
+                f[i][j]=min(f[i-1][j],f[i-1][j+(1<<(i-1))]);
+    }
+    int query(int l,int r)
+    {
+        if(l>r) swap(l,r);
+        x=lg[r-l];
+        return min(f[x][l],f[x][r-(1<<x)+1]);
+    }
+};
+
 struct BIT{ // getmax
     vt<int> A;
     int n;
