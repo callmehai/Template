@@ -51,8 +51,8 @@ ull mulmod(ull a,ull b,ull mod) //  a * b % mod
 }
 ull powmod(ull b, ull e, ull mod) { // a ^ b % mod
     ull ans = 1;
-    for (; e ; e >>= 1, b = mulmod(b, b, mod))
-        if (e & 1) ans = mulmod (ans, b, mod) ;
+    for (; e ; e >>= 1, (b*=b)%=mod)
+        if (e & 1) (ans*=b)%=mod ;
     return ans;
 }
 
