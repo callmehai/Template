@@ -97,7 +97,7 @@ void read_file()
 
 // =========> <3 VietHai1709 <3  <=========
 
-void Minnnnnnn()
+void Solve()
 {
 
 }
@@ -111,7 +111,7 @@ int main(){
     for(int _=1;_<=Test_case;_++)
     {
 //        cout<<"Case #"<<_<<": ";
-        Minnnnnnn();
+        Solve();
         el;
     }
     
