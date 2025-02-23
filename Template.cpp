@@ -60,6 +60,8 @@ using namespace std;
 #define pb push_back
 #define all(arr) arr.begin(),arr.end()
 #define bit(n, i) (((n) >> (i)) & 1)
+#define bitcount(n) __builtin_popcount(n)
+#define bitcountll(n) __builtin_popcountll(n);
 #define db(x) cerr << #x << " = " << (x) << '\n';
 #define el cout<<'\n';
 
@@ -97,7 +99,7 @@ void read_file()
 
 // =========> <3 VietHai1709 <3  <=========
 
-void Solve()
+void solve()
 {
 
 }
@@ -111,7 +113,7 @@ int main(){
     for(int _=1;_<=Test_case;_++)
     {
 //        cout<<"Case #"<<_<<": ";
-        Solve();
+        solve();
         el;
     }
     
