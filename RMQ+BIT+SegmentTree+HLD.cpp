@@ -45,7 +45,7 @@ struct BIT{ // getmax
     }
 };
 
-struct SegmentTree{
+struct SegmentTree{ // add range, get max range
     
     vt<ll> A;
     vt<ll> Lazi;
@@ -53,8 +53,8 @@ struct SegmentTree{
     
     void newSegmentTree(int _){
         n=_;
-        A.resize(n<<2);
-        Lazi.resize(n<<2);
+        A.resize(n<<2,0);
+        Lazi.resize(n<<2,0);
     }
     void down(int id)
         {
@@ -69,36 +69,40 @@ struct SegmentTree{
         Lazi[id]+=val;
         Lazi[id+1]+=val;
         
-        
-        
     }
     void up(int id,int l,int r,int u,int v,ll val)
     {
-
         if(l>v || r<u) return;
+        
         if(l>=u && r<=v){
             Lazi[id]+=val;
             A[id]+=val;
             return;
         }
+
         int mid=(l+r)>>1;
         down(id);
         up(id*2,l,mid,u,v,val);
         up(id*2+1,mid+1,r,u,v,val);
+        A[id]=max(A[id*2],A[id*2+1]);
     }
-    ll get(int id,int l,int r,int u)
+    ll get(int id,int l,int r,int u,int v)
     {
-        if(l==r)
+        if(l>v || r<u) return -ooo;
+
+        if(l>=u && r<=v)
         {
             return A[id];
         }
+        
         down(id);
-        int mid=(l+r)/2;
-        if(u<=mid) return get(id*2,l,mid,u);
-        else return get(id*2+1,mid+1,r,u);
+        int mid=(l+r)>>1;
+        return max(get(id*2,l,mid,u,v),
+                   get(id*2+1,mid+1,r,u,v));
         
     }
 };
+
 struct HLD{
     
     int n;
