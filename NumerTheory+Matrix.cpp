@@ -259,3 +259,41 @@ struct RealMatrix{
     }
 };
 
+
+
+
+// A structure to represent elements in F_p[sqrt5] as a + b*sqrt5.
+struct Cmplx {
+    int a, b; // represents a + b * sqrt5 (mod MOD)
+};
+ 
+// Addition and subtraction.
+Cmplx add(const Cmplx &x, const Cmplx &y) {
+    return { (x.a + y.a) % MOD, (x.b + y.b) % MOD };
+}
+Cmplx sub(const Cmplx &x, const Cmplx &y) {
+    int na = x.a - y.a;
+    if(na < 0) na += MOD;
+    int nb = x.b - y.b;
+    if(nb < 0) nb += MOD;
+    return {na, nb};
+}
+ 
+// Multiplication: (a+b√5) * (c+d√5) = (ac+5bd) + (ad+bc)√5.
+Cmplx mul(const Cmplx &x, const Cmplx &y) {
+    long long na = (1LL * x.a * y.a + 5LL * x.b * y.b) % MOD;
+    long long nb = (1LL * x.a * y.b + 1LL * x.b * y.a) % MOD;
+    return {(int)na, (int)nb};
+}
+ 
+// Fast exponentiation for Cmplx numbers.
+Cmplx modexp(Cmplx base, long long exp) {
+    Cmplx res = {1, 0};
+    while(exp) {
+        if(exp & 1)
+            res = mul(res, base);
+        base = mul(base, base);
+        exp >>= 1;
+    }
+    return res;
+}
