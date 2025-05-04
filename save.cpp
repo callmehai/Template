@@ -25,11 +25,10 @@ using namespace std;
 
 #define all(arr)  arr.begin(),arr.end()
 #define bit(n, i) (((n) >> (i)) & 1)
-#define TIME      (1.0 * clock() / CLOCKS_PER_SEC)
 #define BUG(x)    cerr << #x << " = " << x << '\n';
 #define FPTU      ios_base::sync_with_stdio(0);cin.tie(0);cout.tie(0);
 
-ll mod = 1e9+7; //MODDDDDDDDDDDDD
+int mod = 1e9+7; //MODDDDDDDDDDDDD
 
 template<class X, class Y>
 bool maximize(X &x, const Y &y) {
@@ -56,114 +55,114 @@ void sub(X &a, const Y b) {
     a-=b;
     if(a<0) a+=mod;
 }
-void read_file()
-{
-    freopen("sample.inp","r",stdin);
-    freopen("sample.out","w",stdout);
-}
 // =========> <3 VietHai1709 <3  <=======
-vector<int> col;
-int zero,one,two;
-int N,M,K;
-struct node{
-    int n,zero,one,two,k;
-};
+const int N = 1e5 + 5;
+string s;
+ll base = 97;
+ll poww[N];
 
-map<node,int> dp;
+unordered_map<string, bool> short_str;
+vt<pii> long_str;
 
-int dq(int n,int k){
-    if(n==0){
-        return k==0;
-    }
-    
-    node cur;
-    cur={n,zero,one,two,k};
-    
-//    if(dp[{n,zero,one,two,k}]!=0){
-//        if(dp[{n,zero,one,two,k}]==-1) return 0;
-//        return dp[{n,zero,one,two,k}];
-//    }
-    int ans=0;
-    
-    // no rook
-    add(ans,dq(n-1,k));
+int W;
 
-    // 1 rook
-    if(k>=1){
-        if(zero>0){
-            zero--;
-            one++;
-            
-            int sub = dq(n-1,k-1);
-            
-            zero++;
-            one--;
-            
-            (sub*=zero)%=mod;
-            add(ans,sub);
+void solve() {
+    cin >> s;
+    W = sqrt((int)s.size());
+    
+    int m;
+    cin >> m;
+    
+    int maxShort = 0;
+    while (m--) {
+        string t;
+        cin >> t;
+        int h = 0;
+        for (char c : t) {
+            h = (1ll * h * base + c - 'a' + 1) % mod;
         }
-        
-        if(one>0){
-            one--;
-            two++;
-            
-            int sub = dq(n-1,k-1);
-            
-            one++;
-            two--;
-            
-            (sub*=one)%=mod;
-            add(ans,sub);
+
+        if ((int)t.size() <= W) {
+            short_str[t] = true;
+            maxShort = max(maxShort, (int)t.size());
+        } else {
+            long_str.pb({(int)t.size(), h});
         }
     }
 
-    
-    // 2 rooks
-    if(k>=2)
-    {
-        if(zero>1){
-            zero-=2;
-            two+=2;
-            
-            int sub=dq(n-1,k-2);
-            
-            zero+=2;
-            two-=2;
-            
-            (sub*=zero*(zero-1)/2 )%=mod;
-            
-            add(ans,sub);
+    sort(all(long_str));
+    reverse(all(long_str));
+
+    poww[0] = 1;
+    for (int i = 1; i < N; i++) {
+        poww[i] = poww[i - 1] * base % mod;
+    }
+
+    string R = "";
+    vt<ll> hashR(1, 0);
+
+    for (char c : s) {
+        R += c;
+        ll newHash = (hashR.back() * base + c - 'a' + 1) % mod;
+        hashR.pb(newHash);
+
+        bool erased = true;
+        while (erased) {
+            erased = false;
+
+            // Check long strings
+            for (pii &PII : long_str) {
+                int len = PII.first;
+                int h   = PII.second;
+                if ((int)R.size() >= len) {
+                    int i = (int)R.size() - len + 1;
+                    
+                    ll suffix_hash = (hashR.back() - (hashR[i - 1] * poww[len]) % mod + mod) % mod;
+
+                    if (suffix_hash == h) {
+                        R.resize(R.size() - len);
+                        hashR.resize(hashR.size() - len);
+                        erased = true;
+                        break;
+                    }
+                }
+            }
+
+            if (erased) continue;
+
+            // Check short strings
+            int maxCheck = min(maxShort, (int)R.size());
+            for (int len = maxCheck; len >= 1; --len) {
+                string suffix = R.substr(R.size() - len, len);
+                if (short_str.count(suffix)) {
+                    R.resize(R.size() - len);
+                    hashR.resize(hashR.size() - len);
+                    erased = true;
+                    break;
+                }
+            }
         }
     }
-    
-    if(ans==0) dp[cur]=-1;
-    else  dp[cur]=ans;
-    
-    return ans;
+
+    cout << R;
 }
-void solve(){
-    cin>>N>>M>>K;
-    mod=1000001;
-    
-//    memset(dp,0,sizeof(dp));
-    col.resize(M+1,0);
-    zero=M;
-    one = two = 0;
-    
-    cout<<dq(N,K); el;
-}
-
 int main()
 {
     
     FPTU;
-    read_file();
+    freopen("sample.inp", "r", stdin);
+    freopen("sample.out", "w", stdout);
+    
+//    freopen("censor.in", "r", stdin);
+//    freopen("censor.out", "w", stdout);
 
     int t=1;
-    cin>>t;
+//    cin>>t;
     while(t--){
         solve();
     }
-    cerr << "\nTime elapsed: " << TIME << " s.\n";
+    cerr << "\nTime elapsed: " << (1.0 * clock() / CLOCKS_PER_SEC) << " s.\n";
+
     return 0;
 }
+    
